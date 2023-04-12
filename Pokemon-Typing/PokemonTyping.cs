@@ -58,6 +58,12 @@ namespace Pokemon_Typing
 
         public static TypeCombo combination(int first, int second)
         {
+            if (first > second)
+            {
+                int temp = first;
+                first = second;
+                second = temp;
+            }
             return new TypeCombo
             {
                 type1 = (Type)first,
@@ -65,7 +71,7 @@ namespace Pokemon_Typing
             };
         }
 
-        public static double damage(Type attack, TypeCombo defend, bool pogo = true)
+        public static double damage(Type attack, TypeCombo defend)
         {
             double effect1 = effects[(int)attack][(int)defend.type1];
             double effect2 = effects[(int)attack][(int)defend.type2];
@@ -108,7 +114,7 @@ namespace Pokemon_Typing
                 0;
         }
 
-        public static double calculateScore(TypeCombo attacker,bool debug=false)
+        public static double calculateScore(TypeCombo attacker)
         {
             double score = 0;
             for (int defType1 = 0; defType1 < 18; defType1++)
@@ -118,10 +124,10 @@ namespace Pokemon_Typing
                     TypeCombo defender = combination(defType1, defType2);
                     //Outcome result = compare(attacker, defender);
                     double result = ratio(attacker, defender);
-                    score += result;
+                    score += result * frequency.GetValueOrDefault(defender);
                     if (debug)
                     {
-                        Console.WriteLine($"{attacker} will {result} against {defender})");
+                        Console.WriteLine($"{attacker} scores {result} against {defender})");
                     }
                 }
             }
@@ -142,19 +148,49 @@ namespace Pokemon_Typing
             return scores;
         }
 
+        public static Dictionary<TypeCombo, int> getFrequency()
+        {
+            string[] allPokemon = File.ReadAllLines(@"C:\Users\jdk\Downloads\all Rankings.csv");
+            Dictionary<TypeCombo, int> comboCounts = new Dictionary<TypeCombo, int>();
+            String[] typeNames = Enumerable.Range(0, 19).Select(i => ((Type)i).ToString().ToLower()).ToArray();
+            for(int i = 0; i < 100; i++)
+            {
+                string[] pokemon = allPokemon[i].Split(',');
+                TypeCombo type = combination(Array.IndexOf(typeNames, pokemon[3]), Array.IndexOf(typeNames, pokemon[4]));
+                if (debug)
+                {
+                    Console.WriteLine(pokemon[0]);
+                }
+                if (comboCounts.ContainsKey(type))
+                {
+                    comboCounts[type]++;
+                } else
+                {
+                    comboCounts[type] = 1;
+                }
+            }
+            return comboCounts;
+        }
+
+        public static Dictionary<TypeCombo, int> frequency;
+        public static bool pogo = true;
+        public static bool debug = false;
         public static void main()
         {
+            frequency = getFrequency();
             Dictionary<TypeCombo, double> scores = calculateScores();
             //calculateScore(combination((int)Type.Fire, (int)Type.Ground),true);
 
             var sortedScores = scores.OrderByDescending(x => x.Value).ToList();
-            for(int i = 0; i < 50; i++)
+            for(int i = 0; i < 18; i++)
             {
                 Console.WriteLine($"{sortedScores[i].Key}:{sortedScores[i].Value}");
             }
             //Console.WriteLine(String.Join(',',effects.Select(x => x.Count(e => e == 0).ToString())));
             //Console.WriteLine(Enumerable.Range(0,19).Where(x => effects[0][x] < 1).Select(x => ((Type)x).ToString()).Aggregate((x, y) => x + y));
         }
+
+
 
     }
 }
