@@ -18,9 +18,9 @@ namespace Pokemon_Typing
         // Multipliers for no-modifier attacks, super-effective attacks, not-very-effective attacks, and
         // no-effect attacks, respectively. Symbols are chosen for visual representation in matrix below.
         public static double _ = 1;
-        public static double O = 2;
-        public static double L = .5;
-        public static double E = 0;
+        public static double O = 1.6;
+        public static double L = .625;
+        public static double E = .39025;
 
         // Matrix of type effectiveness matchups. Rows are attackers and columns are defenders.
         // Ordering matches the Type enum above to allow indexing. effects[attacker][defender]
@@ -88,16 +88,12 @@ namespace Pokemon_Typing
             double firstOnSecond = Math.Max(damage(attacker.type1, defender), damage(attacker.type2, defender));
             double secondOnFirst = Math.Max(damage(defender.type1, attacker), damage(defender.type2, attacker));
 
-            // Avoid dividing by zero. TODO: Redesign scoring
-            firstOnSecond = firstOnSecond == 0 ? .25 : firstOnSecond;
-            secondOnFirst = secondOnFirst == 0 ? .25 : secondOnFirst;
-
             // If attacker has the advantage, return the relative modifier.
             // If defender has the advantage, subtract the score they would get.
             // If both have the same advantage, return 0.
             return
-                firstOnSecond > secondOnFirst ? firstOnSecond / secondOnFirst :
-                secondOnFirst > firstOnSecond ? -secondOnFirst / firstOnSecond :
+                firstOnSecond > secondOnFirst ? firstOnSecond / (firstOnSecond + secondOnFirst) :
+                secondOnFirst > firstOnSecond ? -secondOnFirst / (firstOnSecond + secondOnFirst) :
                 0;
         }
 
@@ -180,7 +176,7 @@ namespace Pokemon_Typing
             Dictionary<TypeCombo, double> scores = calculateScores();
 
             var sortedScores = scores.OrderByDescending(x => x.Value).ToList();
-            for(int i = 0; i < 18; i++)
+            for(int i = 0; i < sortedScores.Count; i++)
             {
                 Console.WriteLine($"{sortedScores[i].Key}:{sortedScores[i].Value}");
             }

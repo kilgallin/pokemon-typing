@@ -1,50 +1,171 @@
-Ground/Steel:216
-Fire/Steel:166
-Flying/Steel:166
-Fire/Ground:164
-Flying/Ground:164
-Steel/Fairy:164
-Ghost/Fairy:158
-Ghost/Steel:156
-Ground/Fairy:144
-Fighting/Steel:140
-Water/Steel:134
-Water/Fairy:110
-Ground/Ghost:106
-Dragon/Steel:106
-Fire/Fairy:104
-Dark/Steel:104
-Steel/None:98
-Electric/Steel:96
-Water/Ground:94
-Fire/Water:92
-Ground/Ice:90
-Water/Flying:88
-Ground/Poison:88
-Electric/Fairy:86
-Fire/Ghost:84
-Dark/Fairy:82
-Water/Poison:80
-Fire/Fighting:78
-Poison/Dark:78
-Fighting/Ghost:76
-Electric/Flying:70
-Poison/Steel:66
-Normal/Ghost:62
-Fire/Dragon:62
-Water/Ghost:62
-Flying/Ghost:62
-Ground/None:60
-Psychic/Steel:60
-Normal/Steel:54
-Electric/Ground:54
-Flying/Fighting:54
-Fire/None:52
-Fire/Electric:50
-Fire/Dark:50
-Water/Dragon:50
-Rock/Steel:50
-Bug/Steel:50
-Ghost/Dark:45
-Fire/Grass:44
-Water/Bug:42
+Fire/Ground       :41.867
+Flying/Ground     :41.711
+Flying/Steel      :38.475
+Water/Ground      :37.022
+Ground/Steel      :33.105
+Steel/Fairy       :32.422
+Dragon/Steel      :31.067
+Water/Flying      :30.933
+Ground/Fairy      :28.822
+Water/Steel       :28.489
+Bug/Steel         :27.992
+Ground/Ice        :26.089
+Water/Fairy       :24.4
+Ghost/Fairy       :24.378
+Electric/Steel    :24.356
+Ghost/Steel       :24.2
+Dark/Steel        :23.489
+Grass/Steel       :22.703
+Poison/Dark       :22.089
+Water/Poison      :20.267
+Electric/Fairy    :20.133
+Fighting/Steel    :20
+Fighting/Dark     :18.267
+Ground/Bug        :17.289
+Fighting/Ghost    :17.156
+Fire/Steel        :16.766
+Fire/Water        :16.497
+Fire/Fairy        :16.356
+Ground/Poison     :16.252
+Steel             :16.133
+Electric/Flying   :15.867
+Water/Ghost       :15.667
+Electric/Ground   :15.667
+Water/Dragon      :15.6
+Rock/Fairy        :15.511
+Water/Electric    :14.933
+Fire/Flying       :13.386
+Grass/Rock        :13.333
+Dark/Fairy        :13.186
+Poison/Steel      :13.163
+Fire/Dragon       :12.667
+Ground/Dragon     :12.333
+Normal/Ghost      :12.133
+Fighting/Psychic  :12.067
+Fire/Electric     :12.044
+Rock/Steel        :12.044
+Electric/Poison   :11.865
+Electric/Ghost    :11.6
+Water/Bug         :11.333
+Electric/Fighting :11
+Ground            :10.933
+Rock/Bug          :10.711
+Fire/Grass        :10.222
+Fire/Fighting     :10.178
+Ground/Ghost      :9.83
+Ice/Steel         :9.584
+Normal/Steel      :8.378
+Water             :8
+Water/Rock        :7.689
+Electric          :7.6
+Fire/Ghost        :7.178
+Flying/Fighting   :7.156
+Fire/Rock         :6.711
+Fire/Dark         :6.356
+Water/Ice         :6.267
+Electric/Bug      :6.267
+Psychic/Steel     :6.133
+Fairy             :5.733
+Fire/Ice          :5.6
+Flying/Rock       :5.467
+Fire              :4.533
+Ground/Rock       :3.697
+Psychic/Fairy     :3.608
+Fighting/Poison   :3.133
+Ghost/Dark        :3
+Normal/Fairy      :2.956
+Flying/Dark       :2.956
+Electric/Ice      :2.667
+Ghost             :2.333
+Ice/Fighting      :2.222
+Fighting          :2.089
+Ice/Fairy         :1.903
+Ice/Ghost         :1.667
+Psychic/Ghost     :1.556
+Fire/Psychic      :0.533
+Fire/Bug          :0.533
+Psychic/Dark      :0.489
+Flying/Ice        :0.089
+Rock/Poison       :-0.141
+Fighting/Fairy    :-0.214
+Grass/Ground      :-0.578
+Electric/Rock     :-1.26
+Poison/Fairy      :-1.325
+Normal/Ground     :-1.6
+Ground/Fighting   :-1.881
+Water/Fighting    :-2.044
+Rock/Fighting     :-2.178
+Poison/Ghost      :-2.578
+Poison            :-2.578
+Fire/Poison       :-3.14
+Ground/Dark       :-3.178
+Normal/Water      :-3.467
+Fighting/Dragon   :-3.92
+Water/Dark        :-4.178
+Rock/Ghost        :-4.2
+Rock/Ice          :-4.311
+Flying/Ghost      :-4.503
+Flying            :-4.933
+Ghost/Dragon      :-4.933
+Water/Psychic     :-6
+Dragon/Fairy      :-6.533
+Normal/Fire       :-6.933
+Electric/Dark     :-7.111
+Flying/Fairy      :-7.829
+Ground/Psychic    :-8.378
+Normal/Electric   :-8.867
+Psychic/Poison    :-9.222
+Electric/Psychic  :-9.533
+Ice               :-9.867
+Electric/Dragon   :-10.111
+Bug/Ghost         :-10.2
+Grass/Fairy       :-10.771
+Ice/Poison        :-10.844
+Ice/Bug           :-11.386
+Fighting/Bug      :-11.712
+Normal            :-12
+Water/Grass       :-12.044
+Bug               :-12.133
+Dark              :-13.111
+Grass/Ghost       :-13.578
+Psychic           :-13.867
+Rock/Psychic      :-14.444
+Flying/Poison     :-14.465
+Normal/Flying     :-14.467
+Normal/Psychic    :-14.6
+Rock/Dragon       :-14.711
+Rock              :-15.244
+Bug/Fairy         :-15.859
+Flying/Dragon     :-15.867
+Poison/Dragon     :-15.933
+Rock/Dark         :-16.089
+Ice/Dragon        :-16.4
+Grass/Flying      :-16.489
+Ice/Psychic       :-16.533
+Normal/Dark       :-17.178
+Normal/Ice        :-17.422
+Normal/Rock       :-18.311
+Ice/Dark          :-18.4
+Dragon            :-19.333
+Dragon/Dark       :-20.105
+Flying/Psychic    :-21.289
+Grass/Poison      :-21.689
+Flying/Bug        :-22.037
+Grass/Ice         :-22.808
+Grass/Fighting    :-22.949
+Normal/Fighting   :-23.244
+Grass/Electric    :-23.467
+Psychic/Bug       :-25.778
+Bug/Dark          :-26.933
+Bug/Dragon        :-28.8
+Normal/Bug        :-29.644
+Grass             :-30.578
+Normal/Poison     :-31
+Bug/Poison        :-31.733
+Psychic/Dragon    :-33.133
+Grass/Dark        :-35.422
+Normal/Dragon     :-36.867
+Grass/Bug         :-37.417
+Grass/Psychic     :-37.778
+Grass/Dragon      :-40.178
+Normal/Grass      :-46.311
