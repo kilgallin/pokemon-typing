@@ -1,26 +1,39 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pokemon_Typing
+namespace PokemonTyping
 {
+    // The 18 base types, and a "None" option to represent single-type Pokemon and computational purposes
+    public enum Type
+    {
+        Normal, Fire, Water, Grass, Electric, Flying, Ground, Rock, Ice,
+        Fighting, Psychic, Bug, Poison, Ghost, Dragon, Dark, Steel, Fairy, None
+    };
+
     public class PokemonTyping
     {
-        // The 18 base types, and a "None" option to represent single-type Pokemon and computational purposes
-        public enum Type { Normal, Fire, Water, Grass, Electric, Flying, Ground, Rock, Ice, 
-            Fighting, Psychic, Bug, Poison, Ghost, Dragon, Dark, Steel, Fairy, None };
-        
-        // Tallying matchups
-        public enum Outcome { win=1, lose=-1, tie=0}
-
         // Multipliers for no-modifier attacks, super-effective attacks, not-very-effective attacks, and
         // no-effect attacks, respectively. Symbols are chosen for visual representation in matrix below.
-        public static double _ = 1;
-        public static double O = 1.6;
-        public static double L = .625;
-        public static double E = .39025;
+        public static double _
+        {
+            get { return 1; }
+        }
+        public static double O {
+            get { return Config.pogo ? 1.6 : 2; }
+        }
+        public static double L
+        {
+            get { return Config.pogo ? .625 : .5; }
+        }
+        public static double E
+        {
+            get { return Config.pogo ? .39025 : 0; }
+        }
 
         // Matrix of type effectiveness matchups. Rows are attackers and columns are defenders.
         // Ordering matches the Type enum above to allow indexing. effects[attacker][defender]
@@ -49,32 +62,6 @@ namespace Pokemon_Typing
             new double[]{_, _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _}   // NONE
         };
 
-        // Store and render a type combination
-        public class TypeCombo
-        {
-            public Type type1;
-            public Type type2;
-
-            public override string ToString()
-            {
-                if (type2 == Type.None)
-                {
-                    return type1.ToString().PadRight(18);
-                }
-                return $"{type1.ToString()}/{type2.ToString()}".PadRight(18);
-            }
-
-            public TypeCombo(int first, int second)
-            {
-                if (first > second)
-                {
-                    (first, second) = (second, first);
-                }
-                type1 = (Type)first;
-                type2 = second != first ? (Type)second : Type.None;
-            }
-        }
-
         // Calculate the damage that an attack would do to a Pokemon with a given type combo
         public static double damage(Type attack, TypeCombo defend)
         {
@@ -95,91 +82,6 @@ namespace Pokemon_Typing
                 firstOnSecond > secondOnFirst ? firstOnSecond / (firstOnSecond + secondOnFirst) :
                 secondOnFirst > firstOnSecond ? -secondOnFirst / (firstOnSecond + secondOnFirst) :
                 0;
-        }
-
-        // Text rendering for the outcome of a matchup
-        public static Outcome compare(TypeCombo first, TypeCombo second)
-        {
-            double outcome = ratio(first, second);
-            return
-                outcome > 0 ? Outcome.win :
-                outcome < 0 ? Outcome.lose :
-                Outcome.tie;
-        }
-
-        // Total the score a given attacker would net across all possible defenders
-        public static double calculateScore(TypeCombo attacker)
-        {
-            double score = 0;
-            for (int defType1 = 0; defType1 < 18; defType1++)
-            {
-                for (int defType2 = defType1 + 1; defType2 < 19; defType2++)
-                {
-                    TypeCombo defender = new TypeCombo(defType1, defType2);
-                    double result = ratio(attacker, defender);
-                    score += result;// * (double)frequency.GetValueOrDefault(defender); TODO: frequency broken?
-                    if (debug)
-                    {
-                        //Console.WriteLine($"{attacker} scores {result} against {defender})");
-                    }
-                }
-            }
-            return score;
-        }
-
-        // Calculate scores for all possible attackers
-        public static Dictionary<TypeCombo,double> calculateScores()
-        {
-            Dictionary<TypeCombo, double> scores = new Dictionary<TypeCombo, double>();
-            for (int atkType1 = 0; atkType1 < 18; atkType1++)
-            {
-                for (int atkType2 = atkType1 + 1; atkType2 < 19; atkType2++)
-                {
-                    TypeCombo attacker = new TypeCombo(atkType1, atkType2);
-                    scores[attacker] = Math.Round(calculateScore(attacker)*1000)/1000;
-                }
-            }
-            return scores;
-        }
-
-        // Read pvpoke.com CSV file and parse type combinations from top-tier Pokemon.
-        public static Dictionary<TypeCombo, int> getFrequency()
-        {
-            string[] allPokemon = File.ReadAllLines(@"C:\Users\jdk\Downloads\all Rankings.csv");
-            Dictionary<TypeCombo, int> comboCounts = new Dictionary<TypeCombo, int>();
-            String[] typeNames = Enumerable.Range(0, 19).Select(i => ((Type)i).ToString().ToLower()).ToArray();
-            for(int i = 0; i < 100; i++)
-            {
-                string[] pokemon = allPokemon[i].Split(',');
-                TypeCombo type = new TypeCombo(Array.IndexOf(typeNames, pokemon[3]), Array.IndexOf(typeNames, pokemon[4]));
-                if (debug)
-                {
-                    Console.WriteLine(pokemon[0]);
-                }
-                if (comboCounts.ContainsKey(type))
-                {
-                    comboCounts[type]++;
-                } else
-                {
-                    comboCounts[type] = 1;
-                }
-            }
-            return comboCounts;
-        }
-
-        public static Dictionary<TypeCombo, int> frequency;
-        public static bool pogo = false;
-        public static bool debug = false;
-        public static void main()
-        {
-            frequency = getFrequency();
-            Dictionary<TypeCombo, double> scores = calculateScores();
-
-            var sortedScores = scores.OrderByDescending(x => x.Value).ToList();
-            for(int i = 0; i < sortedScores.Count; i++)
-            {
-                Console.WriteLine($"{sortedScores[i].Key}:{sortedScores[i].Value}");
-            }
         }
     }
 }
