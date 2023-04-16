@@ -7,50 +7,38 @@ using System.Threading.Tasks;
 
 namespace PokemonTyping
 {
+    // Compute and store competitive analysis for a given league or distribution of Pokemon
     public class PokemonRanking
     {
-        public static Dictionary<TypeCombo, int> _frequency = null;
-        public static Dictionary<TypeCombo, int> frequency
+        // Store the number of times a given TypeCombo appears in the input distribution
+        public static Dictionary<TypeCombo, double> _frequency = null;
+        public static Dictionary<TypeCombo, double> frequency
         {
             get { return _frequency ?? loadFrequencies(); }
         }
 
+        // Store the cumulative records of each TypeCombo against the given distribution.
         public static Dictionary<TypeCombo, double> _scores;
         public static Dictionary<TypeCombo, double> scores
         {
             get { return _scores ?? calculateScores(); }
         }
-        public static int getFrequency(TypeCombo type)
+        public static double getFrequency(TypeCombo type)
         {
-            var x = frequency.FirstOrDefault(x => x.Key == type);
-            return x.Value;
+            // Disable weighting and assess against all types
+            if (String.IsNullOrEmpty(Program.leagueFile))  
+            {
+                return 1;
+            }
+            return frequency.FirstOrDefault(x => x.Key == type).Value;
         }
 
         // Read pvpoke.com CSV file and parse type combinations from top-tier Pokemon.
-        private static Dictionary<TypeCombo,int> loadFrequencies()
+        private static Dictionary<TypeCombo,double> loadFrequencies()
         {
-            string[] allPokemon = File.ReadAllLines(@"C:\Users\jdk\Downloads\all Rankings.csv");
-            Dictionary<TypeCombo, int> comboCounts = new Dictionary<TypeCombo, int>();
-            String[] typeNames = Enumerable.Range(0, 19).Select(i => ( (Type)i ).ToString().ToLower()).ToArray();
-            for (int i = 0; i < 100; i++)
-            {
-                string[] pokemon = allPokemon[i].Split(',');
-                TypeCombo type = new TypeCombo(Array.IndexOf(typeNames, pokemon[3]), Array.IndexOf(typeNames, pokemon[4]));
-                if (Config.debug)
-                {
-                    Console.WriteLine(pokemon[0]);
-                }
-                var existing = comboCounts.Where(x => x.Key == type).ToList();
-                if (existing.Count != 0)
-                {
-                    comboCounts[existing[0].Key]++;
-                }
-                else
-                {
-                    comboCounts[type] = 1;
-                }
-            }
-            _frequency = comboCounts;
+            string[] allPokemon = File.ReadAllLines(Program.leagueFile).Take(Program.leagueRelevanceLimit).ToArray();
+            IEnumerable<TypeCombo> allTypes = allPokemon.Select(x => x.Split(',')).Select(x => new TypeCombo(x[3], x[4]));
+            _frequency = allTypes.GroupBy(t => t).ToDictionary(group => group.Key, group => (double)group.Count());
             return _frequency;
         }
 
@@ -63,13 +51,10 @@ namespace PokemonTyping
                 for (int defType2 = defType1 + 1; defType2 < 19; defType2++)
                 {
                     TypeCombo defender = new TypeCombo(defType1, defType2);
-                    double result = PokemonTyping.ratio(attacker, defender);
+                    double result = PokemonTyping.netDamage(attacker, defender);
                     double weight = getFrequency(defender);
                     score += result * weight;
-                    if (Config.debug && weight > 0 && weight != 1)
-                    {
-                        Console.WriteLine($"{attacker} scores {result} against {defender}, weight {weight}");
-                    }
+                    Program.log($"{attacker} scores {result} against {defender}, weight {weight}");
                 }
             }
             return score;

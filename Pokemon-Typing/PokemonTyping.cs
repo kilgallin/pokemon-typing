@@ -19,20 +19,21 @@ namespace PokemonTyping
     {
         // Multipliers for no-modifier attacks, super-effective attacks, not-very-effective attacks, and
         // no-effect attacks, respectively. Symbols are chosen for visual representation in matrix below.
+        // Modifiers account for Pokemon Go type effectiveness multipliers vs those in all other games.
         public static double _
         {
-            get { return 1; }
+            get { return 1; }  // Normal damage
         }
         public static double O {
-            get { return Config.pogo ? 1.6 : 2; }
+            get { return Program.pogo ? 1.6 : 2; }  // Super-effective
         }
         public static double L
         {
-            get { return Config.pogo ? .625 : .5; }
+            get { return Program.pogo ? .625 : .5; }  // Not very effective
         }
         public static double E
         {
-            get { return Config.pogo ? .39025 : 0; }
+            get { return Program.pogo ? .39025 : 0; }  // "No" effect
         }
 
         // Matrix of type effectiveness matchups. Rows are attackers and columns are defenders.
@@ -63,24 +64,24 @@ namespace PokemonTyping
         };
 
         // Calculate the damage that an attack would do to a Pokemon with a given type combo
-        public static double damage(Type attack, TypeCombo defend)
+        public static double effectiveness(Type attack, TypeCombo defend)
         {
             return effects[(int)attack][(int)defend.type1] * effects[(int)attack][(int)defend.type2];
         }
 
         // Calculate the relative type advantage between two Pokemon.
-        public static double ratio(TypeCombo attacker, TypeCombo defender)
+        public static double netDamage(TypeCombo attacker, TypeCombo defender)
         {
             // Damage each Pokemon would do to each other if they used whichever STAB move type is better
-            double firstOnSecond = Math.Max(damage(attacker.type1, defender), damage(attacker.type2, defender));
-            double secondOnFirst = Math.Max(damage(defender.type1, attacker), damage(defender.type2, attacker));
+            double firstOnSecond = Math.Max(effectiveness(attacker.type1, defender), effectiveness(attacker.type2, defender));
+            double secondOnFirst = Math.Max(effectiveness(defender.type1, attacker), effectiveness(defender.type2, attacker));
 
-            // If attacker has the advantage, return the relative modifier.
-            // If defender has the advantage, subtract the score they would get.
+            // If attacker has the advantage, return the expected remaining HP.
+            // If defender has the advantage, return the net HP difference.
             // If both have the same advantage, return 0.
             return
-                firstOnSecond > secondOnFirst ? firstOnSecond / (firstOnSecond + secondOnFirst) :
-                secondOnFirst > firstOnSecond ? -secondOnFirst / (firstOnSecond + secondOnFirst) :
+                firstOnSecond > secondOnFirst ? 1 - (secondOnFirst / firstOnSecond) :
+                secondOnFirst > firstOnSecond ? -1 + (firstOnSecond / secondOnFirst) :
                 0;
         }
     }
