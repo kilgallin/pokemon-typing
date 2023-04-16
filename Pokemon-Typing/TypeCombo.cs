@@ -29,6 +29,7 @@ namespace PokemonTyping
             type2 = second != first ? (Type)second : Type.None;
         }
 
+        // Make a type combo by names of the types (as found in PvPoke CSV file)
         public TypeCombo(string first, string second) :
             this(Array.IndexOf(names, first.ToLower()), Array.IndexOf(names, second.ToLower()))
         { }

@@ -23,6 +23,8 @@ namespace PokemonTyping
         {
             get { return _scores ?? calculateScores(); }
         }
+
+        // Find the number of times the given TypeCombo appears in the data set
         public static double getFrequency(TypeCombo type)
         {
             // Disable weighting and assess against all types
