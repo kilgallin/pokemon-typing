@@ -63,6 +63,18 @@ namespace PokemonTyping
             new double[]{_, _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _}   // NONE
         };
 
+        public static List<TypeCombo> allTypes
+        {
+            get
+            {
+                List<TypeCombo> types = new List<TypeCombo>();
+                forAllTypes(
+                    type => types.Add(type)
+                );
+                return types;
+            }
+        }
+
         // Calculate the damage that an attack would do to a Pokemon with a given type combo
         public static double effectiveness(Type attack, TypeCombo defend)
         {
@@ -88,12 +100,6 @@ namespace PokemonTyping
         public static double netDamage(TypeCombo attacker, TypeCombo defender)
         {
             return netDamage(attacker, defender, attacker, defender);
-        }
-
-        private static TypeCombo getBestMoveset(TypeCombo pkmnType)
-        {
-
-            return null;
         }
 
         public static void forAllTypes(Action<TypeCombo> action)

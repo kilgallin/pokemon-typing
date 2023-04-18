@@ -11,17 +11,23 @@ namespace PokemonTyping
     public class PokemonRanking
     {
         // Store the number of times a given TypeCombo appears in the input distribution
-        public static Dictionary<TypeCombo, double> _frequency = null;
+        public static Dictionary<TypeCombo, double> _frequency = new Dictionary<TypeCombo, double>();
         public static Dictionary<TypeCombo, double> frequency
         {
             get { return _frequency ?? loadFrequencies(); }
         }
 
         // Store the cumulative records of each TypeCombo against the given distribution.
-        public static Dictionary<TypeCombo, double> _scores;
+        public static Dictionary<TypeCombo, double> _scores = new Dictionary<TypeCombo, double>();
         public static Dictionary<TypeCombo, double> scores
         {
             get { return _scores ?? calculateScores(); }
+        }
+
+        public static Dictionary<TypeCombo, TypeCombo> _bestMovesets = new Dictionary<TypeCombo, TypeCombo>();
+        public static Dictionary<TypeCombo, TypeCombo> bestMovesets
+        {
+            get { return _bestMovesets ?? getBestMovesets(); }
         }
 
         // Find the number of times the given TypeCombo appears in the data set
@@ -60,12 +66,31 @@ namespace PokemonTyping
         // Calculate scores for all possible attackers
         private static Dictionary<TypeCombo,double> calculateScores()
         {
-            _scores = new Dictionary<TypeCombo, double>();
             PokemonTyping.forAllTypes(attacker =>
             {
                 _scores[attacker] = Math.Round(calculateScore(attacker) * 1000) / 1000;
             });
             return _scores;
+        }
+
+        private static Dictionary<TypeCombo,TypeCombo> getBestMovesets()
+        {
+            PokemonTyping.forAllTypes(attacker =>
+            {
+                _bestMovesets[attacker] = attacker;
+                double bestScore = double.MinValue;
+                PokemonTyping.forAllTypes(attackerMoves =>
+                {
+                    double movesetQuality = Enumerable.Sum(PokemonTyping.allTypes.Select(defender => PokemonTyping.netDamage(attacker, defender, attackerMoves, defender)));
+                    Console.WriteLine(movesetQuality);
+                    if (movesetQuality > bestScore)
+                    {
+                        _bestMovesets[attacker] = attackerMoves;
+                        bestScore = movesetQuality;
+                    }
+                });
+            });
+            return _bestMovesets;
         }
 
     }

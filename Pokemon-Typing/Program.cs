@@ -22,6 +22,7 @@
         // Main entry point
         static void Main(String[] args)
         {
+            //var x = PokemonRanking.bestMovesets;
             // Get all scores from best to worst
             var sortedScores = PokemonRanking.scores.OrderByDescending(x => x.Value).ToList();
             // Write each type and score from that type in sorted order
