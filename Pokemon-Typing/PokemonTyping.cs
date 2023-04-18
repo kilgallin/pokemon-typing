@@ -41,7 +41,7 @@ namespace PokemonTyping
         // gives the multiplier for that single-type matchup, with the params as indexed by enum.
         public static double[][] effects =
         {
-            //Defender->Nm Fir Wat Gra Ele Fly Gnd Roc Ice Fgt Psy Bug Poi Gho Dgn Drk Ste Fai NONE  Attacker \/
+            //Defender->Nm Fir Wat Gra Ele Fly Gnd Rck Ice Fgt Psy Bug Poi Gho Dgn Drk Ste Fay NONE  Attacker \/
             new double[]{_, _,  _,  _,  _,  _,  _,  L,  _,  _,  _,  _,  _,  O,  _,  _,  L,  _,  _},  // Normal
             new double[]{_, L,  L,  W,  _,  _,  _,  L,  W,  _,  _,  W,  _,  _,  L,  _,  W,  _,  _},  // Fire
             new double[]{_, W,  L,  L,  _,  _,  W,  W,  _,  _,  _,  _,  _,  _,  L,  _,  _,  _,  _},  // Water
@@ -75,33 +75,63 @@ namespace PokemonTyping
             }
         }
 
-        // Calculate the damage that an attack would do to a Pokemon with a given type combo
-        public static double effectiveness(Type attack, TypeCombo defend)
+        // Alternate representation of types as (lower-case) strings
+        public static string[] names
         {
-            return effects[(int)attack][(int)defend.type1] * effects[(int)attack][(int)defend.type2];
+            get
+            {
+                return Enumerable.Range(0, 19).Select(i => ( (Type)i ).ToString().ToLower()).ToArray();
+            }
+        }
+
+        // Same-Type Attack Bonus for attackers using attacks of their own type(s)
+        public static double STABMultiplier
+        {
+            get
+            {
+                return Program.pogo ? 1.2 : 1.5;
+            }
+        }
+
+        // STAB multiplier applied if type matches either of attacker's type, unless type is NONE
+        public static double STAB(Type attack, TypeCombo attacker)
+        {
+            if (attack == Type.None)
+            {
+                return 1;
+            }
+            return ( attack == attacker.type1 || attack == attacker.type2 ) ? STABMultiplier : 1;
+        }
+
+        // Calculate the damage that an attack would do to a Pokemon with a given type combo
+        public static double effectiveness(Type attack, TypeCombo attacker, TypeCombo defend)
+        {
+            return effects[(int)attack][(int)defend.type1] * effects[(int)attack][(int)defend.type2] * STAB(attack, attacker);
         }
 
         // Calculate the relative type advantage between two Pokemon.
         public static double netDamage(TypeCombo attacker, TypeCombo defender, TypeCombo attackerMoves, TypeCombo defenderMoves)
         {
-            // Damage each Pokemon would do to each other if they used whichever STAB move type is better
-            double firstOnSecond = Math.Max(effectiveness(attackerMoves.type1, defender), effectiveness(attackerMoves.type2, defender));
-            double secondOnFirst = Math.Max(effectiveness(defenderMoves.type1, attacker), effectiveness(defenderMoves.type2, attacker));
+            // Damage each Pokemon would do to each other if they used whichever move type is better
+            double firstOnSecond = Math.Max(effectiveness(attackerMoves.type1, attacker, defender), effectiveness(attackerMoves.type2, attacker, defender));
+            double secondOnFirst = Math.Max(effectiveness(defenderMoves.type1, defender, attacker), effectiveness(defenderMoves.type2, defender, attacker));
 
-            // If attacker has the advantage, return the expected remaining HP.
-            // If defender has the advantage, return the net HP difference.
-            // If both have the same advantage, return 0.
+            // If attacker has the advantage, return the expected remaining HP (fractional Pokemon remaining after defeating other).
+            // If defender has the advantage, return the net loss of one Pokemon offset by HP taken off the opponent.
+            // If both have the same advantage, return 0 - both Pokemon should faint at the same time with no gains either way.
             return
                 firstOnSecond > secondOnFirst ? 1 - (secondOnFirst / firstOnSecond) :
                 secondOnFirst > firstOnSecond ? -1 + (firstOnSecond / secondOnFirst) :
                 0;
         }
 
+        // Shortcut to get damage where both Pokemon use their own-type STAB moves
         public static double netDamage(TypeCombo attacker, TypeCombo defender)
         {
             return netDamage(attacker, defender, attacker, defender);
         }
 
+        // Wrapper to call a function once for each type combo
         public static void forAllTypes(Action<TypeCombo> action)
         {
             for (int type1 = 0; type1 < 18; type1++)
