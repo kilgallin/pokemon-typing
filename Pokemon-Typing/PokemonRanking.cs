@@ -47,33 +47,24 @@ namespace PokemonTyping
         // Total the score a given attacker would net across all possible defenders
         private static double calculateScore(TypeCombo attacker)
         {
-            double score = 0;
-            for (int defType1 = 0; defType1 < 18; defType1++)
+            PokemonTyping.forAllTypes(defender =>
             {
-                for (int defType2 = defType1 + 1; defType2 < 19; defType2++)
-                {
-                    TypeCombo defender = new TypeCombo(defType1, defType2);
-                    double result = PokemonTyping.netDamage(attacker, defender);
-                    double weight = getFrequency(defender);
-                    score += result * weight;
-                    Program.log($"{attacker} scores {result} against {defender}, weight {weight}");
-                }
-            }
-            return score;
+                double result = PokemonTyping.netDamage(attacker, defender);
+                double weight = getFrequency(defender);
+                _scores[attacker] = _scores.FirstOrDefault(x => x.Key == attacker).Value + result * weight;
+                Program.log($"{attacker} scores {_scores[attacker]} against {defender}, weight {weight}");
+            });
+            return _scores[attacker];
         }
 
         // Calculate scores for all possible attackers
         private static Dictionary<TypeCombo,double> calculateScores()
         {
             _scores = new Dictionary<TypeCombo, double>();
-            for (int atkType1 = 0; atkType1 < 18; atkType1++)
+            PokemonTyping.forAllTypes(attacker =>
             {
-                for (int atkType2 = atkType1 + 1; atkType2 < 19; atkType2++)
-                {
-                    TypeCombo attacker = new TypeCombo(atkType1, atkType2);
-                    _scores[attacker] = Math.Round(calculateScore(attacker) * 1000) / 1000;
-                }
-            }
+                _scores[attacker] = Math.Round(calculateScore(attacker) * 1000) / 1000;
+            });
             return _scores;
         }
 

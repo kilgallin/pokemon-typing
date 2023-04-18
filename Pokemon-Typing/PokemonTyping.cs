@@ -24,14 +24,14 @@ namespace PokemonTyping
         {
             get { return 1; }  // Normal damage
         }
-        public static double O {
+        public static double W {
             get { return Program.pogo ? 1.6 : 2; }  // Super-effective
         }
         public static double L
         {
             get { return Program.pogo ? .625 : .5; }  // Not very effective
         }
-        public static double E
+        public static double O
         {
             get { return Program.pogo ? .39025 : 0; }  // "No" effect
         }
@@ -42,24 +42,24 @@ namespace PokemonTyping
         public static double[][] effects =
         {
             //Defender->Nm Fir Wat Gra Ele Fly Gnd Roc Ice Fgt Psy Bug Poi Gho Dgn Drk Ste Fai NONE  Attacker \/
-            new double[]{_, _,  _,  _,  _,  _,  _,  L,  _,  _,  _,  _,  _,  E,  _,  _,  L,  _,  _},  // Normal
-            new double[]{_, L,  L,  O,  _,  _,  _,  L,  O,  _,  _,  O,  _,  _,  L,  _,  O,  _,  _},  // Fire
-            new double[]{_, O,  L,  L,  _,  _,  O,  O,  _,  _,  _,  _,  _,  _,  L,  _,  _,  _,  _},  // Water
-            new double[]{_, L,  O,  L,  _,  L,  O,  O,  _,  _,  _,  L,  L,  _,  L,  _,  L,  _,  _},  // Grass
-            new double[]{_, _,  O,  L,  L,  O,  E,  _,  _,  _,  _,  _,  _,  _,  L,  _,  _,  _,  _},  // Electric
-            new double[]{_, _,  _,  O,  L,  _,  _,  L,  _,  O,  _,  O,  _,  _,  _,  _,  L,  _,  _},  // Flying
-            new double[]{_, O,  _,  L,  O,  E,  _,  O,  _,  _,  _,  L,  O,  _,  _,  _,  O,  _,  _},  // Ground
-            new double[]{_, O,  _,  _,  _,  O,  L,  _,  O,  L,  _,  O,  _,  _,  _,  _,  L,  _,  _},  // Rock
-            new double[]{_, L,  L,  O,  _,  O,  O,  _,  L,  _,  _,  _,  _,  _,  O,  _,  L,  _,  _},  // Ice
-            new double[]{O, _,  _,  _,  _,  L,  _,  O,  O,  _,  L,  L,  L,  E,  _,  O,  O,  L,  _},  // Fighting
-            new double[]{_, _,  _,  _,  _,  _,  _,  _,  _,  O,  L,  _,  O,  _,  _,  E,  L,  _,  _},  // Psychic
-            new double[]{_, L,  _,  O,  _,  L,  _,  _,  _,  L,  O,  _,  L,  L,  _,  O,  L,  L,  _},  // Bug
-            new double[]{_, _,  _,  O,  _,  _,  L,  L,  _,  _,  _,  _,  L,  L,  _,  _,  E,  O,  _},  // Poison
-            new double[]{E, _,  _,  _,  _,  _,  _,  _,  _,  _,  O,  _,  _,  O,  _,  L,  _,  _,  _},  // Ghost
-            new double[]{_, _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  O,  _,  L,  E,  _},  // Dragon
-            new double[]{_, _,  _,  _,  _,  _,  _,  _,  _,  L,  O,  _,  _,  O,  _,  L,  _,  L,  _},  // Dark
-            new double[]{_, L,  L,  _,  L,  _,  _,  O,  O,  _,  _,  _,  _,  _,  _,  _,  L,  O,  _},  // Steel
-            new double[]{_, L,  _,  _,  _,  _,  _,  _,  _,  O,  _,  _,  L,  _,  O,  O,  L,  _,  _},  // Fairy
+            new double[]{_, _,  _,  _,  _,  _,  _,  L,  _,  _,  _,  _,  _,  O,  _,  _,  L,  _,  _},  // Normal
+            new double[]{_, L,  L,  W,  _,  _,  _,  L,  W,  _,  _,  W,  _,  _,  L,  _,  W,  _,  _},  // Fire
+            new double[]{_, W,  L,  L,  _,  _,  W,  W,  _,  _,  _,  _,  _,  _,  L,  _,  _,  _,  _},  // Water
+            new double[]{_, L,  W,  L,  _,  L,  W,  W,  _,  _,  _,  L,  L,  _,  L,  _,  L,  _,  _},  // Grass
+            new double[]{_, _,  W,  L,  L,  W,  O,  _,  _,  _,  _,  _,  _,  _,  L,  _,  _,  _,  _},  // Electric
+            new double[]{_, _,  _,  W,  L,  _,  _,  L,  _,  W,  _,  W,  _,  _,  _,  _,  L,  _,  _},  // Flying
+            new double[]{_, W,  _,  L,  W,  O,  _,  W,  _,  _,  _,  L,  W,  _,  _,  _,  W,  _,  _},  // Ground
+            new double[]{_, W,  _,  _,  _,  W,  L,  _,  W,  L,  _,  W,  _,  _,  _,  _,  L,  _,  _},  // Rock
+            new double[]{_, L,  L,  W,  _,  W,  W,  _,  L,  _,  _,  _,  _,  _,  W,  _,  L,  _,  _},  // Ice
+            new double[]{W, _,  _,  _,  _,  L,  _,  W,  W,  _,  L,  L,  L,  O,  _,  W,  W,  L,  _},  // Fighting
+            new double[]{_, _,  _,  _,  _,  _,  _,  _,  _,  W,  L,  _,  W,  _,  _,  O,  L,  _,  _},  // Psychic
+            new double[]{_, L,  _,  W,  _,  L,  _,  _,  _,  L,  W,  _,  L,  L,  _,  W,  L,  L,  _},  // Bug
+            new double[]{_, _,  _,  W,  _,  _,  L,  L,  _,  _,  _,  _,  L,  L,  _,  _,  O,  W,  _},  // Poison
+            new double[]{O, _,  _,  _,  _,  _,  _,  _,  _,  _,  W,  _,  _,  W,  _,  L,  _,  _,  _},  // Ghost
+            new double[]{_, _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  W,  _,  L,  O,  _},  // Dragon
+            new double[]{_, _,  _,  _,  _,  _,  _,  _,  _,  L,  W,  _,  _,  W,  _,  L,  _,  L,  _},  // Dark
+            new double[]{_, L,  L,  _,  L,  _,  _,  W,  W,  _,  _,  _,  _,  _,  _,  _,  L,  W,  _},  // Steel
+            new double[]{_, L,  _,  _,  _,  _,  _,  _,  _,  W,  _,  _,  L,  _,  W,  W,  L,  _,  _},  // Fairy
             new double[]{_, _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _,  _}   // NONE
         };
 
@@ -70,11 +70,11 @@ namespace PokemonTyping
         }
 
         // Calculate the relative type advantage between two Pokemon.
-        public static double netDamage(TypeCombo attacker, TypeCombo defender)
+        public static double netDamage(TypeCombo attacker, TypeCombo defender, TypeCombo attackerMoves, TypeCombo defenderMoves)
         {
             // Damage each Pokemon would do to each other if they used whichever STAB move type is better
-            double firstOnSecond = Math.Max(effectiveness(attacker.type1, defender), effectiveness(attacker.type2, defender));
-            double secondOnFirst = Math.Max(effectiveness(defender.type1, attacker), effectiveness(defender.type2, attacker));
+            double firstOnSecond = Math.Max(effectiveness(attackerMoves.type1, defender), effectiveness(attackerMoves.type2, defender));
+            double secondOnFirst = Math.Max(effectiveness(defenderMoves.type1, attacker), effectiveness(defenderMoves.type2, attacker));
 
             // If attacker has the advantage, return the expected remaining HP.
             // If defender has the advantage, return the net HP difference.
@@ -83,6 +83,28 @@ namespace PokemonTyping
                 firstOnSecond > secondOnFirst ? 1 - (secondOnFirst / firstOnSecond) :
                 secondOnFirst > firstOnSecond ? -1 + (firstOnSecond / secondOnFirst) :
                 0;
+        }
+
+        public static double netDamage(TypeCombo attacker, TypeCombo defender)
+        {
+            return netDamage(attacker, defender, attacker, defender);
+        }
+
+        private static TypeCombo getBestMoveset(TypeCombo pkmnType)
+        {
+
+            return null;
+        }
+
+        public static void forAllTypes(Action<TypeCombo> action)
+        {
+            for (int type1 = 0; type1 < 18; type1++)
+            {
+                for (int type2 = type1 + 1; type2 < 19; type2++)
+                {
+                    action(new TypeCombo(type1, type2));
+                }
+            }
         }
     }
 }
