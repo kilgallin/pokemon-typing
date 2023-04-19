@@ -5,6 +5,10 @@
         public static bool pogo = true;
         // Boolean for whether to write debug logging to console
         public static bool debug = false;
+        // Compute scores with best attack type combo instead of STAB type combo
+        public static bool unlockAttackTypes = false;
+        // Number of times to update the best moveset for each type combo
+        public const int bestMovesetIterations = 4;
         // Source file from PvPoke CSV extract
         public static string leagueFile = "";//@"C:\Users\jdk\Downloads\all Rankings.csv";
         // Number of top Pokemon in the league file to consider
