@@ -56,7 +56,7 @@ namespace PokemonTyping
         {
             PokemonTyping.forAllTypes(defender =>
             {
-                double result = PokemonTyping.netDamage(attacker, defender);
+                double result = PokemonTyping.netDamage(attacker, defender, _bestMovesets[attacker], _bestMovesets[defender]);
                 double weight = getFrequency(defender);
                 _scores[attacker] = _scores.FirstOrDefault(x => x.Key == attacker).Value + result * weight;
                 Program.log($"{attacker} scores {_scores[attacker]} against {defender}, weight {weight}");
@@ -76,27 +76,49 @@ namespace PokemonTyping
         }
 
         // Calculate score for every possible pair of attacks for each type
-        private static Dictionary<TypeCombo,TypeCombo> getBestMovesets()
+        private static Dictionary<TypeCombo,TypeCombo> getBestMovesets(int iterations=10)
         {
             _bestMovesets = new Dictionary<TypeCombo,TypeCombo>();
             PokemonTyping.forAllTypes(attacker =>
             {
                 _bestMovesets[attacker] = attacker;
             });
-            PokemonTyping.forAllTypes(attacker =>
+
+            for (int i = 0; i < iterations; i++)
             {
-                double bestScore = double.MinValue;
-                PokemonTyping.forAllTypes(attackerMoves =>
+                Console.WriteLine($"Iteration {i}");
+                bool dirtyIteration = false;
+                PokemonTyping.forAllTypes(attacker =>
                 {
-                    double movesetQuality = Enumerable.Sum(PokemonTyping.allTypes.Select(defender => PokemonTyping.netDamage(attacker, defender, attackerMoves, _bestMovesets[defender])));
-                    Console.WriteLine(movesetQuality);
-                    if (movesetQuality > bestScore)
+                    double bestScore = Enumerable.Sum(PokemonTyping.allTypes.Select(defender => PokemonTyping.netDamage(attacker, defender, _bestMovesets[attacker], _bestMovesets[defender])));
+                    TypeCombo initialBestMovest = _bestMovesets[attacker];
+                    PokemonTyping.forAllTypes(attackerMoves =>
                     {
-                        _bestMovesets[attacker] = attackerMoves;
-                        bestScore = movesetQuality;
+                        double movesetQuality = Enumerable.Sum(PokemonTyping.allTypes.Select(defender => PokemonTyping.netDamage(attacker, defender, attackerMoves, _bestMovesets[defender]) * getFrequency(defender)));
+                        if (movesetQuality > bestScore)
+                        {
+                            _bestMovesets[attacker] = attackerMoves;
+                            bestScore = movesetQuality;
+                        }
+                        if(movesetQuality == bestScore && attackerMoves != _bestMovesets[attacker])
+                        {
+                            Console.WriteLine($"{attacker}: Tie between {attackerMoves} and {_bestMovesets[attacker]}");
+                        }
+                    });
+                    if (initialBestMovest != _bestMovesets[attacker])
+                    {
+                        dirtyIteration = true;
+                        Console.WriteLine($"{attacker}: Replacing {initialBestMovest} with {_bestMovesets[attacker]}");
                     }
                 });
-            });
+
+                // Fixed point found
+                if (!dirtyIteration)
+                {
+                    Console.WriteLine("Fixed point found");
+                    return _bestMovesets;
+                }
+            }
             return _bestMovesets;
         }
 
