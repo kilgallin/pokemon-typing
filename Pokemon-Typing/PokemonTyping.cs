@@ -115,13 +115,19 @@ namespace PokemonTyping
             // Damage each Pokemon would do to each other if they used whichever move type is better
             double firstOnSecond = Math.Max(effectiveness(attackerMoves.type1, attacker, defender), effectiveness(attackerMoves.type2, attacker, defender));
             double secondOnFirst = Math.Max(effectiveness(defenderMoves.type1, defender, attacker), effectiveness(defenderMoves.type2, defender, attacker));
-
+            
+            // Setting a penalty for double-weakness
+            if (secondOnFirst >= 3 && firstOnSecond <= 1.5)
+            {
+                //return -1;
+            }
+            
             // If attacker has the advantage, return the expected remaining HP (fractional Pokemon remaining after defeating other).
             // If defender has the advantage, return the net loss of one Pokemon offset by HP taken off the opponent.
             // If both have the same advantage, return 0 - both Pokemon should faint at the same time with no gains either way.
             return
-                firstOnSecond > secondOnFirst ? 1 - (secondOnFirst / firstOnSecond) :
-                secondOnFirst > firstOnSecond ? -1 + (firstOnSecond / secondOnFirst) :
+                firstOnSecond > secondOnFirst ? 1 - ( secondOnFirst / firstOnSecond ) :
+                secondOnFirst > firstOnSecond ? -1 + ( firstOnSecond / secondOnFirst ) :
                 0;
         }
 
@@ -141,6 +147,20 @@ namespace PokemonTyping
                     action(new TypeCombo(type1, type2));
                 }
             }
+        }
+
+        public static int superEffectiveCoverage(List<Type> types)
+        {
+            int total = 0;
+            forAllTypes(tc =>
+            {
+                if (types.Any(t => effectiveness(t, new TypeCombo((int)t, (int)Type.None), tc) > STABMultiplier))
+                {
+                    //Console.WriteLine(tc);
+                    total++;
+                }
+            });
+            return total;
         }
     }
 }

@@ -70,7 +70,7 @@ namespace PokemonTyping
             _scores = new Dictionary<TypeCombo, double>();
             PokemonTyping.forAllTypes(attacker =>
             {
-                _scores[attacker] = calculateScore(attacker);//Math.Round(calculateScore(attacker) * 10000) / 10000;
+                _scores[attacker] = Math.Round(calculateScore(attacker) * Math.Pow(10,Program.decimalPlaces)) / Math.Pow(10, Program.decimalPlaces);
             });
             return _scores;
         }
@@ -153,5 +153,28 @@ namespace PokemonTyping
             iterateBestMovesets(iterations - 1);
         }
 
+        public static List<List<Type>> orderCoverage()
+        {
+            Dictionary<String, int> coverages = new Dictionary<string, int>();
+            PokemonTyping.forAllTypes(firstTwo =>
+            {
+                PokemonTyping.forAllTypes(secondTwo =>
+                {
+                    if (secondTwo.type1 <= firstTwo.type2)
+                    {
+                        return;
+                    }
+                    List<Type> allFourTypes = new List<Type>() { firstTwo.type1, firstTwo.type2, secondTwo.type1, secondTwo.type2 };
+                    coverages.Add(String.Join(",", allFourTypes.ToArray()), PokemonTyping.superEffectiveCoverage(allFourTypes));
+                });
+            });
+            List<String> ordered = coverages.Keys.ToList()
+                .OrderBy(s => coverages[s])
+                .Reverse()
+                //.Where(s => !s.Contains("None") && !s.Contains("Normal") && !s.Contains("Dragon") && !s.Contains("Ghost"))
+                .Select(s => s + ": " + coverages[s])
+                .ToList();
+            return null;
+        }
     }
 }
